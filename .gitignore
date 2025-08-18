@@ -72,3 +72,22 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# React Native
+ios/build/
+android/build/
+*.iml
+
+# CocoaPods
+ios/Pods/
+ios/Podfile.lock
+
+# Misc
+.expo/
+*.swp
+*.DS_Store
