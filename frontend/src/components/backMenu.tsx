@@ -12,6 +12,8 @@ export default function backMenu() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#272F3A',
-    color: '#F8F8F8',
+    width: '100%',
+    height: '100%',
+    color: 'white',
   },
 });

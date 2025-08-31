@@ -3,7 +3,6 @@ import {AppHeader} from './src/components/layouts/AppHeader';
 import {AppFooter} from './src/components/layouts/AppFooter';
 import AppContent from './src/components/layouts/AppContent';
 import {
-  Animated,
   SafeAreaView,
   StyleSheet,
   Dimensions,
@@ -12,60 +11,33 @@ import {
 } from 'react-native';
 import BackMenu from './src/components/backMenu';
 
-const {width: screenWidth} = Dimensions.get('window');
+const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 
 function App(): React.JSX.Element {
   const [title, setTitle] = React.useState('Welcome');
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const animation = React.useRef(new Animated.Value(0)).current;
 
-  const toggleMenu = () => {
-    Animated.timing(animation, {
-      toValue: isMenuOpen ? 0 : 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const menuWidth = screenWidth * 0.8;
-
-  const translateX = animation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, screenWidth * 0.8],
-  });
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
     <View style={styles.main}>
-      <Animated.View style={{flex: 1, transform: [{translateX}]}}>
-        <SafeAreaView style={styles.container}>
-          <AppHeader title={title} onOptionsPress={toggleMenu} />
-          <AppContent />
-          <AppFooter onContactPress={setTitle} />
-        </SafeAreaView>
-      </Animated.View>
-
-      <Animated.View style={[
-        styles.menu,
-        {
-          transform: [
-              {
-                translateX: animation.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [menuWidth, 0],
-                }),
-              },
-            ],
-          },
-        ]}>
-        <BackMenu />
-      </Animated.View>
+      <SafeAreaView style={styles.container}>
+        <AppHeader title={title} onOptionsPress={toggleMenu} />
+        <AppContent />
+        <AppFooter onContactPress={setTitle} />
+      </SafeAreaView>
 
       {isMenuOpen && (
-        <TouchableOpacity
-          style={styles.TouchableOpacityStyle}
-          onPress={toggleMenu}
-        />
+        <View style={styles.overlay}>
+          <View style={styles.menu}>
+            <BackMenu />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={toggleMenu}>
+              <View style={styles.closeInner} />
+            </TouchableOpacity>
+          </View>
+        </View>
       )}
     </View>
   );
@@ -79,28 +51,32 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 10,
+    gap: 10,
+  },
+  overlay: {
+    position: 'absolute',
+    width: screenWidth,
+    height: screenHeight,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   menu: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    width: screenWidth * 0.8,
+    width: '100%',
     height: '100%',
-    zIndex: 10,
-    padding: 20,
+    backgroundColor: '#272F3A',
+    overflow: 'hidden',
   },
-  menuButton: {
-    marginTop: 20,
+  closeButton: {
+    position: 'absolute',
+    top: 35,
+    right: 20,
     padding: 10,
-    backgroundColor: 'white',
   },
-  TouchableOpacityStyle: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: screenWidth * 0.2,
-    height: '100%',
+  closeInner: {
+    width: 20,
+    height: 20,
+    backgroundColor: 'gray',
+    borderRadius: 10,
   },
 });
 
