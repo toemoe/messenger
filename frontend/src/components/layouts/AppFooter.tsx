@@ -9,11 +9,30 @@ interface FooterProps {
 }
 
 export const AppFooter: React.FC<FooterProps> = ({onContactPress}) => {
+  const [activeTab, setActiveTab] = React.useState<'contacts' | 'chats' | 'profile'>('chats');
   return (
     <View style={styles.container}>
-      <ContactButton onPress={() => onContactPress('Contact')} />
-      <ChatButton onPress={() => onContactPress('Chat')} />
-      <ProfileButton onPress={() => onContactPress('Profile')} />
+      <ContactButton
+        active={activeTab === 'contacts'}
+        onPress={() => {
+          setActiveTab('contacts');
+          onContactPress('Contacts');
+        }}
+      />
+      <ChatButton
+        active={activeTab === 'chats'}
+        onPress={() => {
+          setActiveTab('chats');
+          onContactPress('Chats');
+        }}
+      />
+      <ProfileButton
+        active={activeTab === 'profile'}
+        onPress={() => {
+          setActiveTab('profile');
+          onContactPress('Profile');
+        }}
+      />
     </View>
   );
 };
@@ -25,9 +44,9 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingLeft: 20,
     paddingRight: 20,
-    height: 50,
+    height: 65,
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'gray',
+    backgroundColor: '#2C2C2D',
   },
 });
